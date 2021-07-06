@@ -9,6 +9,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.tooling.preview.Preview
 import com.shubhamkumarwinner.composestate.ui.theme.ComposeStateTheme
 
@@ -20,7 +22,7 @@ class TodoActivity : AppCompatActivity() {
         setContent {
             ComposeStateTheme {
                 Surface {
-                    // TODO: build the screen in compose
+                    TodoActivityScreen(todoViewModel = todoViewModel)
                 }
             }
         }
@@ -28,14 +30,8 @@ class TodoActivity : AppCompatActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+fun TodoActivityScreen(todoViewModel: TodoViewModel){
+    val items: List<TodoItem> by todoViewModel.todoItems.observeAsState(listOf())
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ComposeStateTheme {
-        Greeting("Android")
-    }
+    TodoScreen(items = items, onAddItem = { todoViewModel.addItem(it) }, onRemoveItem = {todoViewModel.removeItem(it)})
 }
